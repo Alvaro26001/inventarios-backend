@@ -3,11 +3,13 @@ const { get } = require('mongoose');
 const TipoEquipo = require('../models/TipoEquipo');
 
 const {validarTipoEquipo} = require('../helpers/validar-tipoEquipo');
+const validarJwt = require('../middlewares/validarJwt');
+const { esAdmin } = require('../middlewares/validarRol');
 
 
 const router = Router();
 
-router.get('/', async function(req, res){
+router.get('/', validarJwt, async function(req, res){
     try
     {
         const tipos = await TipoEquipo.find();
@@ -20,7 +22,7 @@ router.get('/', async function(req, res){
     }
 });
 
-router.post('/', async function(req, res){
+router.post('/', validarJwt, esAdmin, async function(req, res){
     try
     {
         const validaciones = validarTipoEquipo(req);
@@ -47,7 +49,7 @@ router.post('/', async function(req, res){
     }
 });
 
-router.put('/:tipoEquipoId', async function(req, res){
+router.put('/:tipoEquipoId', validarJwt, esAdmin, async function(req, res){
     try
     {
         const validaciones = validarTipoEquipo(req);
@@ -73,7 +75,7 @@ router.put('/:tipoEquipoId', async function(req, res){
     }
 });
 
-router.get('/:tipoId', async function(req, res){
+router.get('/:tipoId',validarJwt,  async function(req, res){
     try
     {
         const tipo = await TipoEquipo.findById(req.params.tipoId);

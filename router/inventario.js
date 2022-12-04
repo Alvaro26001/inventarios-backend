@@ -2,10 +2,12 @@ const { Router } = require('express');
 const Inventario = require('../models/Inventario');
 
 const {validarInventario} = require('../helpers/validar-inventario');
+const validarJwt = require('../middlewares/validarJwt');
+const { esAdmin } = require('../middlewares/validarRol');
 
 const router = Router();
 
-router.get('/', async function(req,res){
+router.get('/', validarJwt, async function(req,res){
     try
     {
         const inventarios = await Inventario.find().populate([
@@ -35,7 +37,7 @@ router.get('/', async function(req,res){
     }
 });
 
-router.post('/', async function(req,res){
+router.post('/', validarJwt, esAdmin, async function(req,res){
     try
     {
 
@@ -79,7 +81,7 @@ router.post('/', async function(req,res){
     }
 });
 
-router.put('/:inventarioId', async function(req,res){
+router.put('/:inventarioId', validarJwt, esAdmin, async function(req,res){
     try
     {
         const validaciones = validarInventario(req);
@@ -126,7 +128,7 @@ router.put('/:inventarioId', async function(req,res){
 }); 
 
 
-router.put('/:usuarioId', async function(req, res){
+router.put('/:usuarioId',validarJwt, esAdmin, async function(req, res){
     try
     {
         const validaciones = validarUsuario(req);
@@ -173,7 +175,7 @@ router.put('/:usuarioId', async function(req, res){
     }
 });
 
-router.get('/:inventarioId', async function(req, res){
+router.get('/:inventarioId',validarJwt, async function(req, res){
     try
     {
         const inventario = await Inventario.findById(req.params.inventarioId);

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const getConnection = async () => {
     try
     {
-        const url = 'mongodb://userBD:3VOmkXlbtJFCpd2b@ac-naf2wtb-shard-00-00.ggmxblw.mongodb.net:27017,ac-naf2wtb-shard-00-01.ggmxblw.mongodb.net:27017,ac-naf2wtb-shard-00-02.ggmxblw.mongodb.net:27017/inventarios-app?ssl=true&replicaSet=atlas-lcoaha-shard-0&authSource=admin&retryWrites=true&w=majority';
+        const url =  process.env.MONGO_URI
 
         await mongoose.connect(url);
     

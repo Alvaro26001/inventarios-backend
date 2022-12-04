@@ -22,7 +22,11 @@ app.use('/marca', require('./router/marca'));
 app.use('/tipo-equipo', require('./router/tipoEquipo'));
 app.use('/inventario', require('./router/inventario'));
 
+//Modulo autenticacion y autorizacion
+ const auth = require('./router/auth')
 
+//Modulo autenticacion y autorizacion
+app.use('/auth',auth)
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)

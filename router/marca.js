@@ -2,10 +2,12 @@ const { Router } = require('express');
 const Marca = require('../models/Marca');
 
 const {validarMarca} = require('../helpers/validar-marca');
+const validarJwt = require('../middlewares/validarJwt');
+const { esAdmin } = require('../middlewares/validarRol');
 
 const  router = Router();
 
-router.get('/', async function(req, res){
+router.get('/', validarJwt ,async function(req, res){
     try
     {
         const marcas = await Marca.find();
@@ -20,7 +22,7 @@ router.get('/', async function(req, res){
 
 });
 
-router.post('/', async function(req, res){
+router.post('/',validarJwt, esAdmin,  async function(req, res){
     try
     {
         const validaciones = validarMarca(req);
@@ -49,7 +51,7 @@ router.post('/', async function(req, res){
     }
 });
 
-router.put('/:marcaId', async function(req, res){
+router.put('/:marcaId',validarJwt, esAdmin, async function(req, res){
     try
     {
         const validaciones = validarMarca(req);
@@ -80,7 +82,7 @@ router.put('/:marcaId', async function(req, res){
     }
 });
 
-router.get('/:marcaId', async function(req, res){
+router.get('/:marcaId', validarJwt, async function(req, res){
     try
     {
         const marca = await Marca.findById(req.params.marcaId);

@@ -2,10 +2,12 @@ const { Router } = require('express');
 const EstadoEquipo = require('../models/EstadoEquipo');
 
 const {validarEstadoEquipo} = require('../helpers/validar-estadoEquipo');
+const validarJwt = require('../middlewares/validarJwt');
+const { esAdmin } = require('../middlewares/validarRol');
 
 const router = Router();
 
-router.get('/', async function(req,res) {
+router.get('/', validarJwt, async function(req,res) {
     try
     {
         const tipos = await EstadoEquipo.find();
@@ -18,7 +20,7 @@ router.get('/', async function(req,res) {
     }
 });
 
-router.post('/', async function(req,res) {
+router.post('/',validarJwt, esAdmin, async function(req,res) {
     try
     {
         const validaciones = validarEstadoEquipo (req);
@@ -46,7 +48,7 @@ router.post('/', async function(req,res) {
     }
 });
 
-router.put('/:estadoEquipoId', async function(req,res) {
+router.put('/:estadoEquipoId',validarJwt, esAdmin, async function(req,res) {
     try
     {
         const validaciones = validarEstadoEquipo (req);
@@ -78,7 +80,7 @@ router.put('/:estadoEquipoId', async function(req,res) {
     }
 });
 
-router.get('/:estadoId', async function(req, res){
+router.get('/:estadoId', validarJwt, async function(req, res){
     try
     {
         const estado = await EstadoEquipo.findById(req.params.estadoId);

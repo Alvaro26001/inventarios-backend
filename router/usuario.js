@@ -6,8 +6,10 @@ const {validarUsuario} = require('../helpers/validar-usuario');
 
 const router = Router();
 const Usuario = require('../models/Usuario');
+const validarJwt = require('../middlewares/validarJwt');
+const { esAdmin } = require('../middlewares/validarRol');
 
-router.post('/', async function(req, res){
+router.post('/', validarJwt, esAdmin, async function(req, res){
 
     try
     {
@@ -49,7 +51,7 @@ router.post('/', async function(req, res){
     
 });  
 
-router.get('/', async function(req, res){
+router.get('/', validarJwt,  async function(req, res){
     
     try
     {
@@ -64,7 +66,7 @@ router.get('/', async function(req, res){
 
 });
 
-router.put('/:usuarioId', async function(req, res){
+router.put('/:usuarioId', validarJwt, esAdmin , async function(req, res){
     try
     {
         const validaciones = validarUsuario(req);
@@ -95,7 +97,7 @@ router.put('/:usuarioId', async function(req, res){
     }
 });
 
-router.get('/:usuarioId', async function(req, res){
+router.get('/:usuarioId', validarJwt, async function(req, res){
     try
     {
         const usuario = await Usuario.findById(req.params.usuarioId);
